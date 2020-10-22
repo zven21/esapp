@@ -1,5 +1,13 @@
 use Mix.Config
 
+config :esapp, Esapp.EventStore,
+  serializer: Commanded.Serialization.JsonSerializer,
+  username: "postgres",
+  password: "postgres",
+  database: "esapp_eventstore_dev",
+  hostname: "localhost",
+  pool_size: 10
+
 # Configure your database
 config :esapp, Esapp.Repo,
   username: "postgres",
