@@ -1,4 +1,8 @@
-defmodule Esapp.CMS.Post do
+defmodule Esapp.CMS.Schemas.Post do
+  @moduledoc """
+
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

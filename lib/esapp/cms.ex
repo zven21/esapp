@@ -4,9 +4,12 @@ defmodule Esapp.CMS do
   """
 
   import Ecto.Query, warn: false
-  alias Esapp.Repo
 
-  alias Esapp.CMS.Post
+  alias Esapp.Repo
+  alias Esapp.EventApp
+  alias Esapp.CMS.Commands.CreatePost
+
+  alias Esapp.CMS.Schemas.Post
 
   @doc """
   Returns the list of posts.
@@ -49,10 +52,16 @@ defmodule Esapp.CMS do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
-    |> Post.changeset(attrs)
-    |> Repo.insert()
+  def create_post(%{"user_id" => user_id, "title" => title, "body" => body}) do
+    with :ok <-
+           EventApp.dispatch(
+             %CreatePost{user_id: String.to_integer(user_id), title: title, body: body},
+             consistency: :strong
+           ) do
+      {:ok, Repo.get_by(Post, %{title: title})}
+    else
+      _ -> {:error, :app_event_error}
+    end
   end
 
   @doc """

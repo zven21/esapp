@@ -2,7 +2,7 @@ defmodule EsappWeb.PostController do
   use EsappWeb, :controller
 
   alias Esapp.CMS
-  alias Esapp.CMS.Post
+  alias Esapp.CMS.Schemas.Post
 
   def index(conn, _params) do
     posts = CMS.list_posts()
@@ -15,6 +15,8 @@ defmodule EsappWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
+    # require IEx; IEx.pry
+
     case CMS.create_post(post_params) do
       {:ok, post} ->
         conn

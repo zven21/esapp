@@ -14,9 +14,11 @@ defmodule Esapp.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Esapp.PubSub},
       # Start the Endpoint (http/https)
-      EsappWeb.Endpoint
+      EsappWeb.Endpoint,
       # Start a worker by calling: Esapp.Worker.start_link(arg)
       # {Esapp.Worker, arg}
+      Esapp.EventApp,
+      Esapp.CMS.Supervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
