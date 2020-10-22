@@ -16,8 +16,7 @@ defmodule EsappWeb.Router do
 
   scope "/", EsappWeb do
     pipe_through :browser
-
-    live "/", PageLive, :index
+    resources "/", PostController
   end
 
   # Other scopes may use custom stacks.
