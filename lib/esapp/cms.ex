@@ -7,7 +7,7 @@ defmodule Esapp.CMS do
 
   alias Esapp.Repo
   alias Esapp.EventApp
-  alias Esapp.CMS.Commands.CreatePost
+  alias Esapp.CMS.Commands.{CreatePost, UpdatePost}
 
   alias Esapp.CMS.Schemas.Post
 
@@ -69,17 +69,31 @@ defmodule Esapp.CMS do
 
   ## Examples
 
-      iex> update_post(post, %{field: new_value})
+      iex> update_post(%{field: new_value})
       {:ok, %Post{}}
 
-      iex> update_post(post, %{field: bad_value})
+      iex> update_post(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_post(%Post{} = post, attrs) do
-    post
-    |> Post.changeset(attrs)
-    |> Repo.update()
+  def update_post(attrs) do
+    post_id = Map.get(attrs, "id") |> String.to_integer()
+
+    with :ok <- Esapp.EventApp.dispatch(%UpdatePost{}, consistency: :strong) do
+      {:ok, Repo.get!(Post, post_id)}
+    else
+      _ -> {:error, :app_update_event_error}
+    end
+
+    # with :ok <- EventApp.dispatch(%UpdatePost{id: String.to_integer(post_id), title: title, body: body, user_id: String.to_integer(user_id)}, consistency: :strong) do
+    #   {:ok, Repo.get!(Post, String.to_integer(post_id))}
+    # else
+    #   _ -> {:error, :app_update_event_error}
+    # end
+
+    # post
+    # |> Post.changeset(attrs)
+    # |> Repo.update()
   end
 
   @doc """

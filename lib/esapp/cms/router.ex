@@ -5,9 +5,11 @@ defmodule Esapp.CMS.Router do
 
   alias Esapp.CMS.{
     Commands.CreatePost,
+    Commands.UpdatePost,
+    Commands.DeletePost,
     Aggregate
   }
 
   identify(Aggregate, by: :title, prefix: "cms-post-")
-  dispatch([CreatePost], to: Aggregate)
+  dispatch([CreatePost, UpdatePost, DeletePost], to: Aggregate)
 end

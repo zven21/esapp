@@ -15,8 +15,6 @@ defmodule EsappWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    # require IEx; IEx.pry
-
     case CMS.create_post(post_params) do
       {:ok, post} ->
         conn
